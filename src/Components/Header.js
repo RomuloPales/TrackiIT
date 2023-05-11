@@ -1,12 +1,13 @@
 import styled from 'styled-components'; 
 import { Link } from 'react-router-dom';
 import TrackIt from '../assets/TrackIt.png';
-import Lion from "../assets/lion.jpg";
 import { useContext } from 'react';
+import { UserContext } from "../context/UserContext";
+
+
 
 export default function Header(){
-
-
+const {user} = useContext(UserContext);
 
 return(
     <Topo>
@@ -16,7 +17,7 @@ return(
                 </Link>
                 <div>
                 <Link to="/">
-                    <img className="user-image" src={Lion} key="user" alt="user" />
+                    <img className="user-image" src={user.image} key="user" alt="user" />
                  </Link>
                 </div>
             </div>

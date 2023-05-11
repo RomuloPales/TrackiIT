@@ -2,9 +2,12 @@ import styled from 'styled-components';
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';
+import { useContext } from "react";
+import { ProgressContext } from "../context/ProgressContext";
 
 
 export default function Footer() {
+    const { progress } = useContext(ProgressContext);
     return (
         <Footers>
             <div className="container" data-test="menu">
@@ -16,7 +19,7 @@ export default function Footer() {
                         <CircularProgressbar
                             background={true}
                             backgroundPadding={7}
-                            value={80}
+                            value={progress}
                             text="Hoje"
                             styles={buildStyles({
                                 pathColor: 'white',
