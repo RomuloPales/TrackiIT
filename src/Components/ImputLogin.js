@@ -3,28 +3,32 @@ import styled from "styled-components";
 import apiAuth from "../services/apiAuth";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/UserContext";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function InputLogin() {
   const [form, Setform] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false); 
   const { setUser} = useContext(UserContext);
   const navigate = useNavigate();
 
-
   function handleChange(e) {
-    Setform({ ...form, [e.target.name]: e.target.value });
+    Setform({ ...form, [e.target.name ]: e.target.value });
   }
 
   function handleLogin(e) {
     e.preventDefault();
-  
+    setIsLoading(true);
     apiAuth
       .login(form)
       .then((res) => {
+        setIsLoading(false);
         const { id, name, token, image } = res.data;
         setUser({ id, name, token, image });
         navigate("/hoje");
       })
       .catch((err) => {
+        setIsLoading(false);
+        alert(err.response.data.message);
         console.log(err.response.data);
       });
   }
@@ -35,6 +39,7 @@ export default function InputLogin() {
           name="email"
           type="email"
           required
+          disabled={isLoading}
           placeholder="email"
           value={form.email}
           onChange={handleChange}
@@ -44,12 +49,18 @@ export default function InputLogin() {
           name="password"
           type="password"
           required
+          disabled={isLoading}
           placeholder="senha"
           value={form.password}
           onChange={handleChange}
         />
 
-        <button type="submit">Entrar</button>
+        <button disabled={isLoading} type="submit">
+          {isLoading? (
+          <ThreeDots width={50} height={50} color="#ffffff" />
+            
+            ) : "Entrar"}
+        </button>
       </StyledForm>
     </Imputs>
   );
@@ -66,12 +77,18 @@ const Imputs = styled.div`
     border: 1px solid #d4d4d4;
     border-radius: 5px;
     margin-top: 6px;
+    
   }
   button {
     min-width: 84%;
     text-align: center;
     color: white;
     background-color: #52b6ff;
+    font-size: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
   }
   input::placeholder {
     text-align: left;

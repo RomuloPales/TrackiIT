@@ -1,19 +1,86 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import apiAuth from "../services/apiAuth";
+import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
+
 export default function SignUp() {
+  const [form, Setform] = useState({
+    email: "",
+    password: "",
+    name: "",
+    image: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  function handleChange(e) {
+    Setform({ ...form, [e.target.name]: e.target.value });
+  }
+
   function handleSignUp(e) {
     e.preventDefault();
-    navigate("/");
+    setIsLoading(true);
+    apiAuth
+      .signUp(form)
+      .then((res) => {
+        setIsLoading(false);
+        alert("Cadastro realizado com sucesso!")
+        navigate("/");
+      })
+      .catch((err) => {
+        alert(err.response.data.message);
+        setIsLoading(false);
+      });
   }
+
   return (
     <Imputs>
       <StyledForm onSubmit={handleSignUp}>
-        <input type="email" placeholder="email" />
-        <input type="password" placeholder="senha" />
-        <input type="text" placeholder="nome" />
-        <input type="text" placeholder="foto" />
-        <button type="submit">Cadastrar</button>
+        <StyledInput
+          name="email"
+          type="email"
+          required
+          disabled={isLoading}
+          placeholder="email"
+          value={form.email}
+          onChange={handleChange}
+        />
+        <StyledInput
+          name="password"
+          type="password"
+          required
+          disabled={isLoading}
+          placeholder="senha"
+          value={form.password}
+          onChange={handleChange}
+        />
+        <StyledInput
+          name="name"
+          type="text"
+          required
+          disabled={isLoading}
+          placeholder="nome"
+          value={form.name}
+          onChange={handleChange}
+        />
+        <StyledInput
+          name="image"
+          type="url"
+          required
+          disabled={isLoading}
+          placeholder="foto"
+          value={form.image}
+          onChange={handleChange}
+        />
+
+        <button disabled={isLoading} type="submit">
+          {isLoading ? (
+            <ThreeDots width={50} height={50} color="#ffffff" />
+          ) : (
+            "Cadastrar"
+          )}
+        </button>
       </StyledForm>
     </Imputs>
   );
@@ -56,3 +123,4 @@ const StyledForm = styled.form`
   justify-content: space-evenly;
   align-items: center;
 `;
+const StyledInput = styled.input``;

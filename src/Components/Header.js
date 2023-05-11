@@ -2,10 +2,13 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import TrackIt from '../assets/TrackIt.png';
 import Lion from "../assets/lion.jpg";
+import { useContext } from 'react';
 
 export default function Header(){
-return(
 
+
+
+return(
     <Topo>
         <div className="container">
                 <Link to="/hoje">

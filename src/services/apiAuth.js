@@ -9,7 +9,7 @@ function login(body) {
 }
 
 function signUp(body) {
-    const promise = axios.post(`${baseURL}/signup`, body);
+    const promise = axios.post(`${baseURL}/sign-up`, body);
     return promise;
 }
 
