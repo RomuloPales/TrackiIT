@@ -1,18 +1,54 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import apiAuth from "../services/apiAuth";
+import { useContext, useState } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function InputLogin() {
+  const [form, Setform] = useState({ email: "", password: "" });
+  const { setUser} = useContext(UserContext);
   const navigate = useNavigate();
-  function handleLogin(e) {
-    e.preventDefault();
-    navigate("/hoje");
+
+
+  function handleChange(e) {
+    Setform({ ...form, [e.target.name]: e.target.value });
   }
 
+  function handleLogin(e) {
+    e.preventDefault();
+  
+    apiAuth
+      .login(form)
+      .then((res) => {
+        const { id, name, token, image } = res.data;
+        setUser({ id, name, token, image });
+        navigate("/hoje");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  }
   return (
     <Imputs>
       <StyledForm onSubmit={handleLogin}>
-        <input type="email" placeholder="email" />
-        <input type="password" placeholder="senha" />
+        <StyledInput
+          name="email"
+          type="email"
+          required
+          placeholder="email"
+          value={form.email}
+          onChange={handleChange}
+        />
+
+        <StyledInput
+          name="password"
+          type="password"
+          required
+          placeholder="senha"
+          value={form.password}
+          onChange={handleChange}
+        />
+
         <button type="submit">Entrar</button>
       </StyledForm>
     </Imputs>
@@ -50,3 +86,4 @@ const StyledForm = styled.form`
   justify-content: space-evenly;
   align-items: center;
 `;
+const StyledInput = styled.input``;
