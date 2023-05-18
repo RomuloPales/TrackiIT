@@ -2,12 +2,14 @@ import styled from "styled-components";
 import Header from "../Components/Header";
 import MyHabits from "../Components/Habits";
 import Footer from "../Components/Footer";
+
 export default function Habitos() {
+  
   return (
     <Main>
-     <Header/>
-     <MyHabits/>
-     <Footer/>
+      <Header />
+      <MyHabits />
+      <Footer />
     </Main>
   );
 }
